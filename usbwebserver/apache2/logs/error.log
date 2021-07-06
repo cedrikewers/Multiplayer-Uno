@@ -1,7 +1,0 @@
-PHP Warning:  PHP Startup: Unable to load dynamic library 'C:/Users/cedri/Documents/Programing Projects/Multiplayer Uno/usbwebserver\\php\\ext\\php_curl.dll' - %1 ist keine zul\xef\xbf\xbdssige Win32-Anwendung.\r\n in Unknown on line 0
-[Mon Jul 05 16:16:12.401978 2021] [mpm_winnt:notice] [pid 4800:tid 912] AH00455: Apache/2.4.29 (Win32) PHP/7.1.11 configured -- resuming normal operations
-[Mon Jul 05 16:16:12.401978 2021] [mpm_winnt:notice] [pid 4800:tid 912] AH00456: Server built: Nov  3 2017 01:01:54
-[Mon Jul 05 16:16:12.401978 2021] [core:notice] [pid 4800:tid 912] AH00094: Command line: 'C:\\Users\\cedri\\Documents\\Programing Projects\\Multiplayer Uno\\usbwebserver/apache2/bin/httpd_usbwv8.exe -d C:/Users/cedri/Documents/Programing Projects/Multiplayer Uno/usbwebserver/apache2'
-[Mon Jul 05 16:16:12.408980 2021] [mpm_winnt:notice] [pid 4800:tid 912] AH00418: Parent: Created child process 1308
-PHP Warning:  PHP Startup: Unable to load dynamic library 'C:/Users/cedri/Documents/Programing Projects/Multiplayer Uno/usbwebserver\\php\\ext\\php_curl.dll' - %1 ist keine zul\xef\xbf\xbdssige Win32-Anwendung.\r\n in Unknown on line 0
-[Mon Jul 05 16:16:13.351491 2021] [mpm_winnt:notice] [pid 1308:tid 672] AH00354: Child: Starting 64 worker threads.
