@@ -42,7 +42,7 @@ class Lobby extends CI_Controller {
 		$data = fread($lobbyData, filesize('./lobbys/'.$id.'.json'));
 		fclose($lobbyData);
 
-		echo 'data: {$data}\n\n';
+		echo "data: {$data}\n\n";
 		flush();
 	}
 
