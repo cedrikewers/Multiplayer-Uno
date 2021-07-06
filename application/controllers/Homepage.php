@@ -6,13 +6,13 @@ class Homepage extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->library("Template");
+		$this->load->library("template");
 	}
 
 	public function index()
 	{
-		$this->Template->set('title', "Tres");
-		$this->Template->load('template/template', 'homepage/homepage');
+		$this->template->set('title', "Tres");
+		$this->template->load('template/template', 'homepage/homepage');
 	}
 
 	
