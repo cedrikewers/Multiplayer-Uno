@@ -45,6 +45,31 @@ class Game extends CI_Controller {
         }
     }
 
+	public function update($id, $userId){
+		header('Content-Type: text/event-stream');
+		header('Cache-Control: no-cache');
+
+		$lobbyData = fopen('./lobbys/'.$id.'.json', 'r'); 
+		$data = json_decode(fread($lobbyData, filesize('./lobbys/'.$id.'.json')), true);
+		fclose($lobbyData);
+
+		foreach($data['players'] as $name => $player){
+			if($player['id'] == $userId){
+				$data['client']['username'] = $player['username'];
+				$data['client']['number'] = $name;
+			}
+		}
+
+		unset($data['talon']);
+		foreach($data['players'] as $playerName => $val){
+			unset($data['players'][$playerName]['id']);
+		}
+
+		$JSONdata = json_encode($data);
+		echo "data: {$JSONdata}\n\n";
+		flush();
+	}
+
 
 	
 }

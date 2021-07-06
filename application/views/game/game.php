@@ -79,31 +79,28 @@
 
 <script>
 
-    const source = new EventSource("<?php echo site_url('/lobby/update/'.$id);?>");
+    const source = new EventSource("<?php echo site_url('/game/update/'.$id.'/'.$_GET['userId']);?>");
 
     first = true;
-    clientPlayer = 'host';
-    playerCount = 1;
+    order = ['host', 0, 1, 2, 'host', 0, 1];
 
     source.onmessage = function(event){
         let data = JSON.parse(event.data);
 
+        //first time only
         if(first){
-            for( let i = 0; i <= data.playerCount-2; i++){
-                if(data.players[i].id == "<?php echo $_GET['userId'] ?>"){
-                    clientPlayer = i;
-                }
-            } 
-            $("#player1").html(data.players[clientPlayer].username);
-
+            $("#player1").html(data.client['username']);
             first = false;
         }
 
-        while(playerCount < data.playerCount){
-             $("#player"+(playerCount+1)).html(data.players[playerCount-1].username);
-             playerCount++;
+       //update players
+       let pointer = order.indexOf(data.client.number);
+        for(let i = 2; i <= data.playerCount+1; i++){
+            pointer++;
+            if(data.players[order[pointer]]){
+                $("#player"+i).html(data.players[order[pointer]].username);
+            }
         }
-
 
     }   
 
