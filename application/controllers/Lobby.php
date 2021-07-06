@@ -6,7 +6,7 @@ class Lobby extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->library("template");
+		$this->load->library("Template");
 	}
 	//Redirect 
 	public function index()
@@ -91,8 +91,8 @@ class Lobby extends CI_Controller {
 				$viewData['host'] = true;
 			}
 
-			$this->template->set('title', 'Tres');
-        	$this->template->load('template/template', 'lobby/lobby', $viewData);
+			$this->Template->set('title', 'Tres');
+        	$this->Template->load('template/template', 'lobby/lobby', $viewData);
 		}
 		else{
 			redirect('');

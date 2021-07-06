@@ -1,5 +1,5 @@
 <?php
-class template {
+class Template {
 var $template_data = array();
 
     function load($template, $view, $view_data = array()){
