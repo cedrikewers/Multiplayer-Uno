@@ -12,40 +12,46 @@
         height: 230px;
         width: 153px;
     }
+    p.username{
+        color: rgb(255,255,255);
+        text-align: center;
+        overflow:hidden;
+        width:100px;
+    }
 </style>
 <div style="background: rgb(211,58,73);min-height:100%;">
     <div class="row"style="margin:0%">
         <div class="col-lg-3 col-xl-3" style="height: 20vh;"><img src="/assets/img/tres.png" height="100%" /></div>
         <div class="col-lg-8 col-xl-6 text-center d-xl-flex justify-content-xl-center align-items-xl-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
             <div><img src="/assets/img/user.png" height="100px" />
-                <p style="color: rgb(255,255,255);text-align: center;">Username</p>
+                <p id="player3" class="username">Not in Game3</p>
             </div><span style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;">10</span>
         </div>
     </div>
     <div class="row" style="margin:0%">
         <div class="col-xl-3 d-xl-flex justify-content-xl-center align-items-xl-center" style="height: 35vh;"><span style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;">10</span><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
             <div><img src="/assets/img/user.png" height="100px" />
-                <p style="color: rgb(255,255,255);text-align: center;">Username</p>
+                <p id="player2" class="username">Not in game2</p>
             </div>
         </div>
         <!-- offener Talon -->
         <div class="col-xl-6" >
-       <div class="cardWraper" style="transform:rotate(0deg)"> 
+       <div class="cardWraper" style="transform:rotate(60deg)"> 
             <img src="/assets/UNO_cards_deck.svg" height="800%">
         </div>
-            
+
         </div>
         <div class="col-xl-3 d-xl-flex justify-content-xl-center align-items-xl-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
             <div><img src="/assets/img/user.png" height="100px" />
-                <p style="color: rgb(255,255,255);text-align: center;">Username</p>
+                <p id="player4" class="username">Not in Game4</p>
             </div><span style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;">10</span>
         </div>
     </div>
     <div class="row"style="margin:0%">
         <div class="col-xl-3" style="height: 20vh;"></div>
-        <div class="col-xl-6 d-xl-flex justify-content-xl-center align-items-xl-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+            <div class="col-xl-6 d-xl-flex justify-content-xl-center align-items-xl-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
             <div><img src="/assets/img/user.png" height="100px" />
-                <p style="color: rgb(255,255,255);text-align: center;"><?php echo $_COOKIE['username'] ?></p>
+                <p id="player1" class="username"></p>
             </div><span style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;">10</span>
         </div>
         <div class="col-xl-3"></div>
@@ -70,3 +76,36 @@
     <div class="col-2"></div>
     </div>
 </div>
+
+<script>
+
+    const source = new EventSource("<?php echo site_url('/lobby/update/'.$id);?>");
+
+    first = true;
+    clientPlayer = 'host';
+    playerCount = 1;
+
+    source.onmessage = function(event){
+        let data = JSON.parse(event.data);
+
+        if(first){
+            for( let i = 0; i <= data.playerCount-2; i++){
+                if(data.players[i].id == "<?php echo $_GET['userId'] ?>"){
+                    clientPlayer = i;
+                }
+            } 
+            $("#player1").html(data.players[clientPlayer].username);
+
+            first = false;
+        }
+
+        while(playerCount < data.playerCount){
+             $("#player"+(playerCount+1)).html(data.players[playerCount-1].username);
+             playerCount++;
+        }
+
+
+    }   
+
+
+</script>

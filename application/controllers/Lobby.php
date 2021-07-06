@@ -122,10 +122,39 @@ class Lobby extends CI_Controller {
 	{
 		$data = $this->getJSON($id);
 
+		$data['talon'] = $this->newTalon();
 		$data['state'] = 'game';
 
 		$this->setJSON($id, $data);
 	}
+
+	public function newTalon(){
+		$farben = array('r' => 0, 'g' => 2, 'b'=> 3, 'y'=> 1);
+		
+		$talon = array();
+
+		for($i = 0; $i < 4; $i++){
+			array_push($talon, array('name' => '+4', 'x' => 13, 'y' => 4));
+			array_push($talon, array('name' => 'c', 'x' => 13, 'y' => 0));
+		}
+		foreach($farben as $f => $y){
+			for($i = 0; $i < 10; $i++){
+				array_push($talon, array('name' => $f.$i, 'x' => $i, 'y' => $y));
+			}
+			for($i = 1; $i < 10; $i++){
+				array_push($talon, array('name' => $f.$i, 'x' => $i, 'y' => $y));
+			}
+			for($i = 0; $i < 2; $i++){
+				array_push($talon, array('name' => $f."+2", 'x' => $i, 'y' => $y));
+				array_push($talon, array('name' => $f."a", 'x' => $i, 'y' => $y));
+			}
+		}
+
+		shuffle($talon);
+
+		return $talon;
+
+	} 
 
 	
 

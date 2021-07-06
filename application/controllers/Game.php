@@ -34,13 +34,17 @@ class Game extends CI_Controller {
     public function main($id)
     {
         if(file_exists('./lobbys/'.$id.'.json')){
+
+
+
             $this->template->set('title', 'Tres');
-        	$this->template->load('template/template', 'game/game');
+        	$this->template->load('template/template', 'game/game', array('id' => $id));
         }
         else{
             redirect();
         }
     }
+
 
 	
 }

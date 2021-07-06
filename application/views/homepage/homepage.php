@@ -4,7 +4,7 @@
     </div>
     <div class="row justify-content-center" style="margin: 0%;">
     <div class="col-10 col-md-9 col-lg-8 col-xl-5 col-xxl-5">
-        <input id="username" type="text" class="bg-white border rounded-pill shadow-lg form-control" name="username" placeholder="Username" <?php if(isset($_COOKIE['username']))echo 'value="'.$_COOKIE['username'];?>" />
+        <input id="username" type="text" class="bg-white border rounded-pill shadow-lg form-control" name="username" maxlength="12" placeholder="Username" <?php if(isset($_COOKIE['username']))echo 'value="'.$_COOKIE['username'];?>" />
     </div>
     <div class="row justify-content-center" style="margin: 0%;">
     <div class="col-10 col-md-9 col-lg-8 col-xl-5">
