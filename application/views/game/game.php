@@ -45,7 +45,7 @@
         <div class="col-xl-3" style="height: 20vh;"></div>
         <div class="col-xl-6 d-xl-flex justify-content-xl-center align-items-xl-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
             <div><img src="/assets/img/user.png" height="100px" />
-                <p style="color: rgb(255,255,255);text-align: center;">Username</p>
+                <p style="color: rgb(255,255,255);text-align: center;"><?php echo $_COOKIE['username'] ?></p>
             </div><span style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;">10</span>
         </div>
         <div class="col-xl-3"></div>
