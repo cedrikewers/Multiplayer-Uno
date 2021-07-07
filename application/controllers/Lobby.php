@@ -65,6 +65,8 @@ class Lobby extends CI_Controller {
 		}
 
 		$talon = $this->newTalon();
+
+		$oTalon = array(array_pop($talon));
 		
 		$newHand = array();
 		for ($i=0; $i < 5; $i++) { 
@@ -83,6 +85,7 @@ class Lobby extends CI_Controller {
 					)
 				),
 			'talon' => $talon,
+			'oTalon' => $oTalon
 		);
 
 		$json = json_encode($lobby);

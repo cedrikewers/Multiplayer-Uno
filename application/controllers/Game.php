@@ -70,6 +70,41 @@ class Game extends CI_Controller {
 		flush();
 	}
 
+	public function playCard($id, $userName)
+	{
+		$lobbyData = $this->getJSON($id);
+
+		foreach($lobbyData['players'][$userName]['hand'] as $number => $card){
+			if($card['name'] == $_POST['name']){			
+				array_push($lobbyData['oTalon'], $card);
+				unset($lobbyData['players'][$userName]['hand'][$number]);
+			}
+		}
+		$lobbyData['players'][$userName]['hand'] = array_values($lobbyData['players'][$userName]['hand']);
+
+		$this->setJSON($id, $lobbyData);
+
+	}
+
+	public function drawCard($id, $userName)
+	{
+		$lobbyData = $this->getJSON($id);
+
+		$card = array_pop($lobbyData['talon']);
+
+		array_push($lobbyData['players'][$userName]['hand'], $card);
+
+		if(count($lobbyData['talon']) < 2){
+			$lobbyData['talon'] = array_merge($lobbyData['talon'], $lobbyData['oTalon']);
+			unset($lobbyData['oTalon']);
+			shuffle($lobbyData['talon']);
+		}
+
+		$this->setJSON($id, $lobbyData);
+
+		echo json_encode($card);
+	}
+
 
 	
 }
