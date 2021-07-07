@@ -25,18 +25,18 @@
         <div class="col-lg-8 col-xl-6 text-center d-xl-flex justify-content-xl-center align-items-xl-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
             <div><img src="/assets/img/user.png" height="100px" />
                 <p id="player3" class="username">Not in Game3</p>
-            </div><span style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;">10</span>
+            </div><span id="cardCount3" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span>
         </div>
     </div>
     <div class="row" style="margin:0%">
-        <div class="col-xl-3 d-xl-flex justify-content-xl-center align-items-xl-center" style="height: 35vh;"><span style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;">10</span><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+        <div class="col-xl-3 d-xl-flex justify-content-xl-center align-items-xl-center" style="height: 35vh;"><span id="cardCount2" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
             <div><img src="/assets/img/user.png" height="100px" />
                 <p id="player2" class="username">Not in game2</p>
             </div>
         </div>
         <!-- offener Talon -->
-        <div class="col-xl-6" >
-       <div class="cardWraper" style="transform:rotate(60deg)"> 
+        <div id="oTalon" class="col-xl-6" >
+        <div class="cardWraper" style="transform:rotate(60deg)"> 
             <img src="/assets/UNO_cards_deck.svg" height="800%">
         </div>
 
@@ -44,7 +44,7 @@
         <div class="col-xl-3 d-xl-flex justify-content-xl-center align-items-xl-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
             <div><img src="/assets/img/user.png" height="100px" />
                 <p id="player4" class="username">Not in Game4</p>
-            </div><span style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;">10</span>
+            </div><span id="cardCount4" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span>
         </div>
     </div>
     <div class="row"style="margin:0%">
@@ -52,25 +52,13 @@
             <div class="col-xl-6 d-xl-flex justify-content-xl-center align-items-xl-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
             <div><img src="/assets/img/user.png" height="100px" />
                 <p id="player1" class="username"></p>
-            </div><span style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;">10</span>
+            </div><span id="cardCount1" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span>
         </div>
         <div class="col-xl-3"></div>
     </div>
     <div class="row" style="margin:0%">
     <div class="col-2"></div>
-    <div class="col-8 d-flex justify-content-center align-items-center">
-        <div class="cardHand" style="transform:rotate(0deg)" onclick="alert('0')"> 
-                <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -0px; margin-left: 0px;">
-        </div>
-        <div class="cardHand" style="transform:rotate(0deg)"onclick="alert('2')"> 
-                <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -230px; margin-left: -308px;">
-        </div>
-        <div class="cardHand" style="transform:rotate(0deg)"onclick="alert('1')"> 
-                <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -460px; margin-left: -154px;">
-        </div>
-        <div class="cardHand" style="transform:rotate(0deg)"onclick="alert('3')"> 
-                <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -690px; margin-left: -462px;">
-        </div>
+    <div id="hand" class="col-8 d-flex justify-content-center align-items-center">
     </div>
         
     <div class="col-2"></div>
@@ -87,22 +75,41 @@
     source.onmessage = function(event){
         let data = JSON.parse(event.data);
 
+        let pointer = order.indexOf(data.client.number);
+
+        var hand = data.players[order[pointer]].hand;
+
         //first time only
         if(first){
-            $("#player1").html(data.client['username']);
+            for (let i = 0; i < hand.length; i++) {
+                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+hand[i].name+'" data-x="'+hand[i].x+'" data-y="'+hand[i].y+'" data><img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+(hand[i].y*230)+'px; margin-left: -'+(hand[i].x*153)+'px;"></div>');
+            }
+
             first = false;
         }
 
        //update players
-       let pointer = order.indexOf(data.client.number);
-        for(let i = 2; i <= data.playerCount+1; i++){
-            pointer++;
+        for(let i = 1; i <= 4; i++){
             if(data.players[order[pointer]]){
                 $("#player"+i).html(data.players[order[pointer]].username);
+                $("#cardCount"+i).html(data.players[order[pointer]].hand.length);
             }
+            pointer++;
+        }
+        pointer -= 3;
+
+        //update oTalon
+        if($("#oTalon").children().length > 4){
+            $("#oTalon").children(":first").remove();
         }
 
+
     }   
+
+    function playCard(pThis){
+        $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>')
+        pThis.remove();
+    }
 
 
 </script>

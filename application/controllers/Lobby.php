@@ -39,9 +39,12 @@ class Lobby extends CI_Controller {
 		header('Cache-Control: no-cache');
 
 		$lobbyData = fopen('./lobbys/'.$id.'.json', 'r'); 
-		$data = fread($lobbyData, filesize('./lobbys/'.$id.'.json'));
+		$data = json_decode(fread($lobbyData, filesize('./lobbys/'.$id.'.json')), true);
 		fclose($lobbyData);
 
+		unset($data['talon']);
+
+		$data = json_encode($data);
 		echo "data: {$data}\n\n";
 		flush();
 	}
@@ -61,6 +64,13 @@ class Lobby extends CI_Controller {
 			$userId = $_COOKIE['id'];
 		}
 
+		$talon = $this->newTalon();
+		
+		$newHand = array();
+		for ($i=0; $i < 5; $i++) { 
+			array_push($newHand, array_pop($talon));
+		}
+
 		$lobby = array(
 			'id' => $id, 
 			'playerCount' => 1,
@@ -68,9 +78,11 @@ class Lobby extends CI_Controller {
 			'players' => array(
 				'host' => array(
 					'username' => $_GET['username'],
-					'id' => $userId
-				)
-			)
+					'id' => $userId,
+					'hand' => $newHand
+					)
+				),
+			'talon' => $talon,
 		);
 
 		$json = json_encode($lobby);
@@ -109,7 +121,15 @@ class Lobby extends CI_Controller {
 			$userId = $_COOKIE['id'];
 		}
 
-		array_push($data['players'], array('username' => $_GET['username'], 'id' => $userId));
+		$newHand = array();
+		for ($i=0; $i < 5; $i++) { 
+			array_push($newHand, array_pop($data['talon']));
+		}
+
+		array_push($data['players'], array('username' => $_GET['username'], 
+											'id' => $userId,
+											'hand' => $newHand
+										));
 		$data['playerCount']++;
 
 		$this->setJSON($id, $data);
@@ -122,7 +142,6 @@ class Lobby extends CI_Controller {
 	{
 		$data = $this->getJSON($id);
 
-		$data['talon'] = $this->newTalon();
 		$data['state'] = 'game';
 
 		$this->setJSON($id, $data);
@@ -134,8 +153,8 @@ class Lobby extends CI_Controller {
 		$talon = array();
 
 		for($i = 0; $i < 4; $i++){
-			array_push($talon, array('name' => '+4', 'x' => 13, 'y' => 4));
-			array_push($talon, array('name' => 'c', 'x' => 13, 'y' => 0));
+			array_push($talon, array('name' => 'n+4', 'x' => 13, 'y' => 4));
+			array_push($talon, array('name' => 'nc', 'x' => 13, 'y' => 0));
 		}
 		foreach($farben as $f => $y){
 			for($i = 0; $i < 10; $i++){
@@ -145,8 +164,9 @@ class Lobby extends CI_Controller {
 				array_push($talon, array('name' => $f.$i, 'x' => $i, 'y' => $y));
 			}
 			for($i = 0; $i < 2; $i++){
-				array_push($talon, array('name' => $f."+2", 'x' => $i, 'y' => $y));
-				array_push($talon, array('name' => $f."a", 'x' => $i, 'y' => $y));
+				array_push($talon, array('name' => $f."+2", 'x' => 12, 'y' => $y));
+				array_push($talon, array('name' => $f."a", 'x' => 10, 'y' => $y));
+				array_push($talon, array('name' => $f."r", 'x' => 11, 'y' => $y));
 			}
 		}
 

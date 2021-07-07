@@ -54,7 +54,7 @@ class Game extends CI_Controller {
 		fclose($lobbyData);
 
 		foreach($data['players'] as $name => $player){
-			if($player['id'] == $userId){
+			if($player['id'] == $userId){//nur beim Spieler
 				$data['client']['username'] = $player['username'];
 				$data['client']['number'] = $name;
 			}
