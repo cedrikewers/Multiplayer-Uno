@@ -36,7 +36,7 @@
         </div>
         <!-- offener Talon -->
         <div id="oTalon" class="col-6" >
-        <div style="position: absolute; margin: 25px 0px 0px 80px; display:none" id="chooseColor">
+        <div id="chooseColor" style="position: absolute; margin: 25px 0px 0px 80px; display:none" >
             <div class="row" style="width: 240px;background: rgb(33, 37, 41); padding:20px 20px 0 20px">
                 <div class="col chooseColorField" style="height: 90px;background: #ff5555;margin-right: 20px;margin-bottom: 20px;" data-color="r"></div>
                 <div class="col chooseColorField" style="height: 90px;background: #5555fd;" data-color="b"></div>
@@ -81,6 +81,8 @@
     var self;
     var lastCard;
     var color = false;
+    var updateTalon = true;
+    var current;
 
     source.onmessage = function(event){
         let data = JSON.parse(event.data);
@@ -111,36 +113,39 @@
             }
             pointer++;
         }
-        pointer -= 3;
 
-        if(lastCard.id != $("#oTalon").children().last().data("id")){
-            $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
-        }
         //update oTalon
-        if($("#oTalon").children().length > 4){
-            $("#oTalon").children(":first").remove();
+        if(updateTalon){
+            if(lastCard.id != $("#oTalon").children().last().data("id")){
+                $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
+            }
+            if($("#oTalon").children().length > 4){
+                $("#oTalon").children(":first").remove();
+            }
         }
 
 
     }   
 
-    function playCard(pThis){
+    async function playCard(pThis){
         if(pThis.data("name").substring(0, 1) == lastCard.name.substring(0,1) || pThis.data("name").substring(0,1) == "n" || pThis.data("name").substring(1) == lastCard.name.substring(1)){
             $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
             
             if(pThis.data("name").substring(0,1) == "n"){
-                //wait for color to be choosen
+                updateTalon = false;
+                current = pThis;
+                $("#chooseColor").show();
             }
+            else{
 
-            $.post("<?php echo site_url('/game/playCard/'.$id.'/');?>"+self,
-            {
-                id: pThis.data('id'),
-            },
-            function(error){
-                console.log(error);
-            });
-            
-            color = null;
+                $.post("<?php echo site_url('/game/playCard/'.$id.'/');?>"+self,
+                {
+                    id: pThis.data('id'),
+                },
+                function(error){
+                    console.log(error);
+                });
+            }
             pThis.remove();
         }
     }
@@ -156,8 +161,21 @@
     }
 
     $(document).ready(function(){
-        $(".chooseColorField").click(function(){
+        $(".chooseColorField").click(function(){//eine Frabe wird gewählt
             color = $(this).data('color');
+            $("#chooseColor").hide();
+            $.post("<?php echo site_url('/game/playCard/'.$id.'/');?>"+self,
+                {
+                    id: current.data('id'),
+                    color: color,
+                },
+                function(error){
+                    console.log(error);
+                });
+
+            color = null;
+            updateTalon = true;
+
         });
     })
 

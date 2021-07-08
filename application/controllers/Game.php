@@ -34,9 +34,6 @@ class Game extends CI_Controller {
     public function main($id)
     {
         if(file_exists('./lobbys/'.$id.'.json')){
-
-
-
             $this->template->set('title', 'Tres');
         	$this->template->load('template/template', 'game/game', array('id' => $id));
         }
@@ -76,7 +73,10 @@ class Game extends CI_Controller {
 		$lobbyData = $this->getJSON($id);
 
 		foreach($lobbyData['players'][$userName]['hand'] as $number => $card){
-			if($card['id'] == $_POST['id']){			
+			if($card['id'] == $_POST['id']){		
+				if(isset($_POST['color'])){
+					$card['name'] = $_POST['color'].substr($card['name'], 1);
+				}	
 				array_push($lobbyData['oTalon'], $card);
 				unset($lobbyData['players'][$userName]['hand'][$number]);
 			}
