@@ -58,7 +58,7 @@
         <div id="hand" class="col-10 d-flex justify-content-center align-items-center">
     </div>
 
-    <img id="talon" src="/assets/img/cardBack.png" style="position:absolute; left: 0px; width: 200px; bottom: 0px" onclick="drawCard()"/>
+    <img id="talon" src="/assets/img/CardBack.png" style="position:absolute; left: 0px; width: 200px; bottom: 0px" onclick="drawCard()"/>
 </div>
 
 <script>
@@ -78,13 +78,15 @@
 
         hand = data.players[order[pointer]].hand;
 
+        let lastCard = data.oTalon[data.oTalon.length-1];
+
         //first time only
         if(first){
             for (let i = 0; i < hand.length; i++) {
-                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+hand[i].name+'" data-x="'+hand[i].x+'" data-y="'+hand[i].y+'" data><img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+(hand[i].y*230)+'px; margin-left: -'+(hand[i].x*153)+'px;"></div>');
+                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+hand[i].name+'" data-x="'+hand[i].x+'" data-y="'+hand[i].y+'" data-id="'+hand[i].id+'"><img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+(hand[i].y*230)+'px; margin-left: -'+(hand[i].x*153)+'px;"></div>');
             }
 
-            $("#oTalon").append('<div class="cardWraper"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+data.oTalon[0].y*180+'px; margin-left: -'+data.oTalon[0].x*120+'px"></div>');
+            $("#oTalon").append('<div class="cardWraper" data-id="'+lastCard.id+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
 
             self = order[pointer];
 
@@ -101,6 +103,9 @@
         }
         pointer -= 3;
 
+        if(lastCard.id != $("#oTalon").children().last().data("id")){
+            $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
+        }
         //update oTalon
         if($("#oTalon").children().length > 4){
             $("#oTalon").children(":first").remove();
@@ -110,11 +115,11 @@
     }   
 
     function playCard(pThis){
-        $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
+        $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
         
         $.post("<?php echo site_url('/game/playCard/'.$id.'/');?>"+self,
         {
-            name: pThis.data('name'),
+            id: pThis.data('id'),
         },
         function(error){
             console.log(error);
@@ -129,7 +134,7 @@
         },
         function(JSONcard){
             let card = JSON.parse(JSONcard);
-            $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+card.name+'" data-x="'+card.x+'" data-y="'+card.y+'" data><img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+(card.y*230)+'px; margin-left: -'+(card.x*153)+'px;"></div>');
+            $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+card.name+'" data-x="'+card.x+'" data-y="'+card.y+'" data-id="'+card.id+'"><img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+(card.y*230)+'px; margin-left: -'+(card.x*153)+'px;"></div>');
         });
     }
 

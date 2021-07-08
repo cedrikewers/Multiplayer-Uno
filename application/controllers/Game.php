@@ -66,6 +66,7 @@ class Game extends CI_Controller {
 		}
 
 		$JSONdata = json_encode($data);
+		echo "retry: 1000\n";
 		echo "data: {$JSONdata}\n\n";
 		flush();
 	}
@@ -75,7 +76,7 @@ class Game extends CI_Controller {
 		$lobbyData = $this->getJSON($id);
 
 		foreach($lobbyData['players'][$userName]['hand'] as $number => $card){
-			if($card['name'] == $_POST['name']){			
+			if($card['id'] == $_POST['id']){			
 				array_push($lobbyData['oTalon'], $card);
 				unset($lobbyData['players'][$userName]['hand'][$number]);
 			}
