@@ -178,6 +178,7 @@ class Lobby extends CI_Controller {
 				array_push($talon, array('name' => $f."a", 'x' => 10, 'y' => $y, 'id'=>$id));
 				$id++;
 				array_push($talon, array('name' => $f."r", 'x' => 11, 'y' => $y, 'id'=>$id));
+				$id++;
 			}
 		}
 
