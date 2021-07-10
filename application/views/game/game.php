@@ -80,7 +80,6 @@
     var hand;
     var self;
     var lastCard;
-    var color = false;
     var updateTalon = true;
     var current;
 
@@ -119,8 +118,8 @@
             if(lastCard.id != $("#oTalon").children().last().data("id")){
                 $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
             }
-            if($("#oTalon").children().length > 4){
-                $("#oTalon").children(":first").remove();
+            if($("#oTalon").children().length > 5){
+                $("#oTalon").children().eq(1).remove();
             }
         }
 
@@ -162,18 +161,13 @@
 
     $(document).ready(function(){
         $(".chooseColorField").click(function(){//eine Frabe wird gewählt
-            color = $(this).data('color');
             $("#chooseColor").hide();
             $.post("<?php echo site_url('/game/playCard/'.$id.'/');?>"+self,
                 {
                     id: current.data('id'),
-                    color: color,
-                },
-                function(error){
-                    console.log(error);
+                    color: $(this).data('color'),
                 });
 
-            color = null;
             updateTalon = true;
 
         });
