@@ -77,6 +77,10 @@ class Lobby extends CI_Controller {
 			'id' => $id, 
 			'playerCount' => 1,
 			'state' => 'lobby',
+			'turn' => 0,
+			'round' => 1,
+			'clockwise' => true,
+			'cardDictate' => array('order' => null, 'origin' => null, 'round' => null),//i.e. +4/+2 (draw cards); syntax: [order => ""+2/+4", origin => player, round => round]
 			'players' => array(
 				'host' => array(
 					'username' => $_GET['username'],
@@ -158,7 +162,7 @@ class Lobby extends CI_Controller {
 		$id = 1;
 
 		for($i = 0; $i < 4; $i++){
-			array_push($talon, array('name' => 'n+4', 'x' => 13, 'y' => 4, 'id'=>$id));
+			array_push($talon, array('name' => 'nplus4', 'x' => 13, 'y' => 4, 'id'=>$id));
 			$id++;
 			array_push($talon, array('name' => 'nc', 'x' => 13, 'y' => 0, 'id'=>$id));
 			$id++;
@@ -173,7 +177,7 @@ class Lobby extends CI_Controller {
 				$id++;
 			}
 			for($i = 0; $i < 2; $i++){
-				array_push($talon, array('name' => $f."+2", 'x' => 12, 'y' => $y, 'id'=>$id));
+				array_push($talon, array('name' => $f."plus2", 'x' => 12, 'y' => $y, 'id'=>$id));
 				$id++;
 				array_push($talon, array('name' => $f."a", 'x' => 10, 'y' => $y, 'id'=>$id));
 				$id++;

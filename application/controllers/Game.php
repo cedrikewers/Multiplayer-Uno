@@ -74,20 +74,41 @@ class Game extends CI_Controller {
 
 		foreach($lobbyData['players'][$userName]['hand'] as $number => $card){
 			if($card['id'] == $_POST['id']){		
-				if(isset($_POST['color'])){
+				if(isset($_POST['color'])){//if +4 or c => color gets updated
 					$card['name'] = $_POST['color'].substr($card['name'], 1);
+				}
+
+				switch(substr($card['name'], 1)){
+					case 'plus4':
+						$lobbyData['cardDictate'] = array('order' => 'plus4', 'origin' =>$userName, 'round' => $lobbyData['round']);
+						break;
+					case 'plus2':
+						$lobbyData['cardDictate'] = array('order' => 'plus2', 'origin' =>$userName, 'round' => $lobbyData['round']);
+						break;
+					case "r":
+						$lobbyData['clockwise'] = !$lobbyData['clockwise'];
+						break;
+					case "a":
+						if($lobbyData['clockwise'])$lobbyData['turn']++;
+						else $lobbyData['turn']--;
+						break;
 				}	
+
 				array_push($lobbyData['oTalon'], $card);
 				unset($lobbyData['players'][$userName]['hand'][$number]);
 			}
 		}
 		$lobbyData['players'][$userName]['hand'] = array_values($lobbyData['players'][$userName]['hand']);
 
+		if($lobbyData['clockwise'])$lobbyData['turn'] = ($lobbyData['turn']+1) % $lobbyData['playerCount'];
+		else $lobbyData['turn'] = ($lobbyData['turn']+($lobbyData['playerCount']-1)) % $lobbyData['playerCount'];
+		$lobbyData['round']++;
+
 		$this->setJSON($id, $lobbyData);
 
 	}
 
-	public function drawCard($id, $userName)
+	public function drawCard($id, $userName, $endTurn = 1)
 	{
 		$lobbyData = $this->getJSON($id);
 
@@ -99,6 +120,13 @@ class Game extends CI_Controller {
 			$lobbyData['talon'] = array_merge($lobbyData['talon'], $lobbyData['oTalon']);
 			unset($lobbyData['oTalon']);
 			shuffle($lobbyData['talon']);
+		}
+
+
+		if($endTurn == 1){
+			if($lobbyData['clockwise'])$lobbyData['turn'] = ($lobbyData['turn']+1) % $lobbyData['playerCount'];
+			else $lobbyData['turn'] = ($lobbyData['turn']+($lobbyData['playerCount']-1)) % $lobbyData['playerCount'];
+			$lobbyData['round']++;
 		}
 
 		$this->setJSON($id, $lobbyData);
