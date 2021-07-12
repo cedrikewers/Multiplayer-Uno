@@ -235,7 +235,7 @@
     }
 
     function drawCard(endTurn = 1){
-        if(clientTurn){
+        if(clientTurn && cardDrawn == null){
             if(endTurn == 1)clientTurn = false;
             $.post("<?php echo site_url('/game/drawCard/'.$id.'/');?>"+self+'/'+endTurn,
             {
