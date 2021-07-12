@@ -80,10 +80,10 @@ class Game extends CI_Controller {
 
 				switch(substr($card['name'], 1)){
 					case 'plus4':
-						$lobbyData['cardDictate'] = array('order' => 'plus4', 'origin' =>$userName, 'round' => $lobbyData['round']);
+						$lobbyData['cardDictate'] = array('order' => 'plus4', 'origin' =>$userName, 'executed' => false);
 						break;
 					case 'plus2':
-						$lobbyData['cardDictate'] = array('order' => 'plus2', 'origin' =>$userName, 'round' => $lobbyData['round']);
+						$lobbyData['cardDictate'] = array('order' => 'plus2', 'origin' =>$userName,'executed' => false);
 						break;
 					case "r":
 						$lobbyData['clockwise'] = !$lobbyData['clockwise'];
@@ -122,16 +122,44 @@ class Game extends CI_Controller {
 			shuffle($lobbyData['talon']);
 		}
 
-
+		$cardCanBePlayed = false;
 		if($endTurn == 1){
-			if($lobbyData['clockwise'])$lobbyData['turn'] = ($lobbyData['turn']+1) % $lobbyData['playerCount'];
-			else $lobbyData['turn'] = ($lobbyData['turn']+($lobbyData['playerCount']-1)) % $lobbyData['playerCount'];
-			$lobbyData['round']++;
+			$topCard = end($lobbyData['oTalon']);
+			if(substr($topCard['name'], 0, 1) == substr($card['name'], 0, 1) or substr($topCard['name'], 1) == substr($card['name'], 1) or substr($card['name'],0 , 1) == "n"){
+				$cardCanBePlayed = true;
+			}
+
+			if($cardCanBePlayed == false){
+				if($lobbyData['clockwise'])$lobbyData['turn'] = ($lobbyData['turn']+1) % $lobbyData['playerCount'];
+				else $lobbyData['turn'] = ($lobbyData['turn']+($lobbyData['playerCount']-1)) % $lobbyData['playerCount'];
+				$lobbyData['round']++;
+			}
 		}
 
 		$this->setJSON($id, $lobbyData);
 
-		echo json_encode($card);
+		$sendData = array('card' => $card, 'playable' => $cardCanBePlayed);
+
+		echo json_encode($sendData);
+	}
+
+	public function orderExecuted($id){
+		$lobbyData = $this->getJSON($id);
+
+		$lobbyData['cardDictate']['executed'] = true;
+
+		$this->setJSON($id, $lobbyData);
+	}
+
+	public function endTurn($id){
+		$lobbyData = $this->getJSON($id);
+
+		if($lobbyData['clockwise'])$lobbyData['turn'] = ($lobbyData['turn']+1) % $lobbyData['playerCount'];
+		else $lobbyData['turn'] = ($lobbyData['turn']+($lobbyData['playerCount']-1)) % $lobbyData['playerCount'];
+		$lobbyData['round']++;
+
+		$this->setJSON($id, $lobbyData);
+
 	}
 
 

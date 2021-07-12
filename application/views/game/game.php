@@ -69,15 +69,16 @@
         <div class="col-3"></div>
     </div>
     <div class="row" style="margin:0%">
-    <div class="col-1"></div>
-        <div id="hand" class="col-10 d-flex justify-content-center align-items-center">
-    </div>
+        <div class="col-1"></div>
+        <div id="hand" class="col-10 d-flex justify-content-center align-items-center"></div>
+        <div class="col-1 d-flex justify-content-center align-items-center">
+            <button id="endTurn" class="btn btn btn-warning" style="display: none;">End Turn</button>
+        </div>
 
     <img id="talon" src="/assets/img/CardBack.png" style="position:absolute; left: 0px; width: 200px; bottom: 0px" onclick="drawCard()"/>
 </div>
 
 <script>
-
     const source = new EventSource("<?php echo site_url('/game/update/'.$id.'/'.$_GET['userId']);?>");
 
     first = true;
@@ -91,10 +92,10 @@
     var updateTalon = true;
     var current;
     var clientTurn = false;
-    var orderExecuted = 1;
+    var cardDrawn = null;
 
 
-    source.onmessage = function(event){
+    source.onmessage = async function(event){
         let data = JSON.parse(event.data);
 
         pointer = order.indexOf(data.client.number);
@@ -120,9 +121,14 @@
         if(order[data.turn] == self){
             clientTurn = true;
         }
+        else{
+            clientTurn = false;
+        }
 
        //update players
         for(let i = 1; i <= 4; i++){
+            if(order[data.turn] == order[pointer])$("#player"+i).prev().css("border", "5px solid #FFC100");
+            else $("#player"+i).prev().css("border", "none");
             if(data.players[order[pointer]]){
                 $("#player"+i).html(data.players[order[pointer]].username);
                 $("#cardCount"+i).html(data.players[order[pointer]].hand.length);
@@ -131,24 +137,6 @@
             pointer++;
         }
 
-        //execute Card
-        if(orderExecuted != data.round && data.cardDictate.round == (data.round-1)){
-            if(data.cardDictate.origin == prev && data.clockwise == true || data.cardDictate.origin == next && data.clockwise == false){
-                switch(data.cardDictate.order){
-                    case "plus2":
-                        for(let i = 0; i < 2; i++){
-                            drawCard(0);
-                        }
-                        break;
-                    case "plus4":
-                        for(let i = 0; i < 4; i++){
-                            drawCard(0);
-                        }
-                        break;   
-                }
-            }
-            orderExecuted = data.round;
-        }
 
         //update oTalon
         if(updateTalon){
@@ -158,7 +146,7 @@
             if($("#oTalon").children().length > 4){
                 $("#oTalon").children().eq(0).remove();
             }
-            if(lastCard.name.substring(1) == "c" || lastCard.name.substring(1) == "+4"){
+            if(lastCard.name.substring(1) == "c" || lastCard.name.substring(1) == "plus4"){
                     let colorHex;
                     let colorName;
                     switch(lastCard.name.substring(0,1)){
@@ -187,32 +175,62 @@
             }
         }
 
+         //execute Card
+         if(data.cardDictate.executed == false){//ist die order schon ausgeführt
+            if(data.cardDictate.origin == prev && data.clockwise == true || data.cardDictate.origin == next && data.clockwise == false){//betrifft die Order den Spieler
+                $.post("<?php echo site_url('/game/orderExecuted/'.$id.'/');?>");
+                switch(data.cardDictate.order){
+                    case "plus2":
+                        for(let i = 0; i < 2; i++){
+                            drawCard(0);
+                            await sleep(300); 
+                        }
+                        break;
+                    case "plus4":
+                        for(let i = 0; i < 4; i++){
+                            drawCard(0);
+                            await sleep(300);
+                        }
+                        break;   
+                }
+            }
+        }
+
 
     }   
 
     function playCard(pThis){
-        if(clientTurn){
-            if(pThis.data("name").substring(0, 1) == lastCard.name.substring(0,1) || pThis.data("name").substring(0,1) == "n" || pThis.data("name").substring(1) == lastCard.name.substring(1)){
-                $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
-                
-                if(pThis.data("name").substring(0,1) == "n"){
-                    updateTalon = false;
-                    current = pThis;
-                    $("#chooseColor").show();
-                }
-                else{
-                    clientTurn = false;
+        let allowed = false;
 
-                    $.post("<?php echo site_url('/game/playCard/'.$id.'/');?>"+self,
-                    {
-                        id: pThis.data('id'),
-                    },
-                    function(error){
-                        console.log(error);
-                    });
-                }
-                pThis.remove();
+        if(clientTurn && cardDrawn == null){//wenn der Spieler am zug ist
+            if(pThis.data("name").substring(0, 1) == lastCard.name.substring(0,1) || pThis.data("name").substring(0,1) == "n" || pThis.data("name").substring(1) == lastCard.name.substring(1)) allowed = true;
+        }
+        else{//wenn der Spieler eine karte gezogen hat und diese legen kann
+            if(cardDrawn['id'] == pThis.data("id")) allowed = true;
+        }
+
+        if(allowed){
+            $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
+            
+            if(pThis.data("name").substring(0,1) == "n"){
+                updateTalon = false;
+                current = pThis;
+                $("#chooseColor").show();
             }
+            else{
+                clientTurn = false;
+
+                $.post("<?php echo site_url('/game/playCard/'.$id.'/');?>"+self,
+                {
+                    id: pThis.data('id'),
+                },
+                function(error){
+                    console.log(error);
+                });
+            }
+            pThis.remove();
+            cardDrawn = null;
+            $("#endTurn").hide();
         }
     }
 
@@ -222,9 +240,16 @@
             $.post("<?php echo site_url('/game/drawCard/'.$id.'/');?>"+self+'/'+endTurn,
             {
             },
-            function(JSONcard){
-                let card = JSON.parse(JSONcard);
+            function(JSONReturnVal){
+                let returnVal = JSON.parse(JSONReturnVal);
+
+                let card = returnVal.card;
                 $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+card.name+'" data-x="'+card.x+'" data-y="'+card.y+'" data-id="'+card.id+'"><img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+(card.y*230)+'px; margin-left: -'+(card.x*153)+'px;"></div>');
+
+                if(returnVal.playable){
+                    $("#endTurn").show();
+                    cardDrawn = card;
+                }
             });
         }
     }
@@ -247,7 +272,18 @@
             }
 
         });
-    })
+
+        $("#endTurn").click(function(){
+            $("#endTurn").hide();
+            cardDrawn = null;
+            clientTurn = false;
+            $.post("<?php echo site_url('/game/endTurn/'.$id);?>");
+        });
+    });
+
+    function sleep(time){
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
 
 
 </script>
