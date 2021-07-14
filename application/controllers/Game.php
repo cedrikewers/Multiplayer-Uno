@@ -172,6 +172,7 @@ class Game extends CI_Controller {
 
 	public function end($id)
 	{
+		sleep(1500);
 		unlink('./lobbys/'.$id.'.json');
 	}
 
