@@ -80,6 +80,7 @@ class Lobby extends CI_Controller {
 			'turn' => 0,
 			'round' => 1,
 			'clockwise' => true,
+			'winner' => null,
 			'cardDictate' => array('order' => null, 'origin' => null, 'executed' => null),//i.e. +4/+2 (draw cards); syntax: [order => ""+2/+4", origin => player, round => round]
 			'players' => array(
 				'host' => array(

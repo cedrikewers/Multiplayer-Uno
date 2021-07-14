@@ -36,6 +36,11 @@
         </div>
         <!-- offener Talon -->
         <div class="col-6" >
+            <div class="d-xl-flex justify-content-center align-items-center" style="position: absolute; width: 50%">
+                <h1 id="showWin"></h1>
+            </div>
+
+
         <span id="showColor" style="position:absolute; text-align: center; font-size: 40px; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; width:51%" ></span>
 
             <div id="chooseColor" style="position: absolute; margin: 25px 0px 0px 80px; display:none" >
@@ -49,7 +54,6 @@
                 </div>
             </div>
             <div id="oTalon" >
-
 
             </div>
         </div>
@@ -115,6 +119,12 @@
             self = order[pointer];
             next = order[(pointer+1) % data.playerCount];
             first = false;
+        }
+
+        //check winner
+        if(data.winner != null){
+            $("#showWin").html(data.players[data.winner].username+" wins the game");
+            $.post("<?php echo site_url('/game/end/'.$id);?>");
         }
 
         //update Turn

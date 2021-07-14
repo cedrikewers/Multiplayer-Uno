@@ -98,11 +98,19 @@ class Game extends CI_Controller {
 				unset($lobbyData['players'][$userName]['hand'][$number]);
 			}
 		}
-		$lobbyData['players'][$userName]['hand'] = array_values($lobbyData['players'][$userName]['hand']);
 
-		if($lobbyData['clockwise'])$lobbyData['turn'] = ($lobbyData['turn']+1) % $lobbyData['playerCount'];
-		else $lobbyData['turn'] = ($lobbyData['turn']+($lobbyData['playerCount']-1)) % $lobbyData['playerCount'];
-		$lobbyData['round']++;
+		if(count($lobbyData['players'][$userName]['hand']) < 1){
+			$lobbyData['winner'] = $userName;
+			$lobbyData['state'] = 'ending';
+			$lobbyData['turn'] = -1;
+		}
+		else{
+			$lobbyData['players'][$userName]['hand'] = array_values($lobbyData['players'][$userName]['hand']);
+
+			if($lobbyData['clockwise'])$lobbyData['turn'] = ($lobbyData['turn']+1) % $lobbyData['playerCount'];
+			else $lobbyData['turn'] = ($lobbyData['turn']+($lobbyData['playerCount']-1)) % $lobbyData['playerCount'];
+			$lobbyData['round']++;
+		}
 
 		$this->setJSON($id, $lobbyData);
 
@@ -162,6 +170,10 @@ class Game extends CI_Controller {
 
 	}
 
+	public function end($id)
+	{
+		unlink('./lobbys/'.$id.'.json');
+	}
 
 	
 }
