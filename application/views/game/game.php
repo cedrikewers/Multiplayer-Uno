@@ -97,9 +97,13 @@
     var current;
     var clientTurn = false;
     var cardDrawn = null;
+    var gameRunning = true;
 
+    
 
     source.onmessage = async function(event){
+        if(gameRunning){
+
         let data = JSON.parse(event.data);
 
         pointer = order.indexOf(data.client.number);
@@ -124,7 +128,7 @@
         //check winner
         if(data.winner != null){
             $("#showWin").html(data.players[data.winner].username+" wins the game");
-            $.post("<?php echo site_url('/game/end/'.$id);?>");
+            gameRunning = false;
         }
 
         //update Turn
@@ -207,7 +211,9 @@
         }
 
 
-    }   
+        } 
+    
+    }
 
     function playCard(pThis){
         let allowed = false;
