@@ -1,5 +1,5 @@
 <style>
-    .cardWraper{
+    .cardWrapper{
         overflow: hidden;
         height: 180px;
         width: 120px;
@@ -21,16 +21,16 @@
 </style>
 <div style="background: rgb(211,58,73);min-height:100%;">
     <div class="row"style="margin:0%">
-        <div class="col-3" style="height: 20vh;"><img src="<?php echo site_url('../assets/img/tres.png')?>" height="100%" /></div>
-        <div class="col-6 text-center d-xl-flex justify-content-center align-items-center"><img src="<?php echo site_url('../assets/img/deck.png')?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
-            <div><img src="<?php echo site_url('../assets/img/user.png')?>" height="100px" />
+        <div class="col-3" style="height: 20vh;"><img src="<?php echo site_url('../assets/img/tres.png') ?>" height="100%" /></div>
+        <div class="col-6 text-center d-xl-flex justify-content-center align-items-center"><img src="<?php echo site_url('../assets/img/deck.png') ?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+            <div><img src="<?php echo site_url('../assets/img/user.png') ?>" height="100px" />
                 <p id="player3" class="username">Not in Game3</p>
             </div><span id="cardCount3" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span>
         </div>
     </div>
     <div class="row" style="margin:0%">
-        <div class="col-3 d-xl-flex justify-content-center align-items-center" style="height: 35vh;"><span id="cardCount2" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span><img src="<?php echo site_url('../assets/img/deck.png')?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
-            <div><img src="<?php echo site_url('../assets/img/user.png')?>" height="100px" />
+        <div class="col-3 d-xl-flex justify-content-center align-items-center" style="height: 35vh;"><span id="cardCount2" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span><img src="<?php echo site_url('../assets/img/deck.png') ?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+            <div><img src="<?php echo site_url('../assets/img/user.png') ?>" height="100px" />
                 <p id="player2" class="username">Not in game2</p>
             </div>
         </div>
@@ -57,16 +57,16 @@
 
             </div>
         </div>
-        <div class="col-3 d-xl-flex justify-content-center align-items-center"><img src="<?php echo site_url('../assets/img/deck.png')?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
-            <div><img src="<?php echo site_url('../assets/img/user.png')?>" height="100px" />
+        <div class="col-3 d-xl-flex justify-content-center align-items-center"><img src="<?php echo site_url('../assets/img/deck.png') ?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+            <div><img src="<?php echo site_url('../assets/img/user.png') ?>" height="100px" />
                 <p id="player4" class="username">Not in Game4</p>
             </div><span id="cardCount4" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span>
         </div>
     </div>
     <div class="row"style="margin:0%">
         <div class="col-3" style="height: 20vh;"></div>
-            <div class="col-6 d-xl-flex justify-content-center align-items-center"><img src="<?php echo site_url('../assets/img/deck.png')?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
-            <div><img src="<?php echo site_url('../assets/img/user.png')?>" height="100px" />
+            <div class="col-6 d-xl-flex justify-content-center align-items-center"><img src="<?php echo site_url('../assets/img/deck.png') ?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+            <div><img src="<?php echo site_url('../assets/img/user.png') ?>" height="100px" />
                 <p id="player1" class="username"></p>
             </div><span id="cardCount1" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span>
         </div>
@@ -79,11 +79,11 @@
             <button id="endTurn" class="btn btn btn-warning" style="display: none;">End Turn</button>
         </div>
 
-    <img id="talon" src="<?php echo site_url('../assets/img/CardBack.png')?>" style="position:absolute; left: 0px; width: 200px; bottom: 0px" onclick="drawCard()"/>
+    <img id="talon" src="<?php echo site_url('../assets/img/CardBack.png') ?>" style="position:absolute; left: 0px; width: 200px; bottom: 0px" onclick="drawCard()"/>
 </div>
 
 <script>
-    const source = new EventSource("<?php echo site_url('/game/update/'.$id.'/'.$_GET['userId']);?>");
+    const source = new EventSource("<?php echo site_url('/game/update/' . $id . '/' . $_GET['userId']); ?>");
 
     first = true;
     order = ['host', 0, 1, 2, 'host', 0, 1];
@@ -99,7 +99,7 @@
     var cardDrawn = null;
     var gameRunning = true;
 
-    
+
 
     source.onmessage = async function(event){
         if(gameRunning){
@@ -115,10 +115,10 @@
         //first time only
         if(first){
             for (let i = 0; i < hand.length; i++) {
-                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+hand[i].name+'" data-x="'+hand[i].x+'" data-y="'+hand[i].y+'" data-id="'+hand[i].id+'"><img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+(hand[i].y*230)+'px; margin-left: -'+(hand[i].x*153)+'px;"></div>');
+                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+hand[i].name+'" data-x="'+hand[i].x+'" data-y="'+hand[i].y+'" data-id="'+hand[i].id+'"><img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+(hand[i].y*230)+'px; margin-left: -'+(hand[i].x*153)+'px;"></div>');
             }
 
-            $("#oTalon").append('<div class="cardWraper" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
+            $("#oTalon").append('<div class="cardWarper" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
 
             self = order[pointer];
             next = order[(pointer+1) % data.playerCount];
@@ -155,7 +155,7 @@
         //update oTalon
         if(updateTalon){
             if(lastCard.id != $("#oTalon").children().last().data("id")){
-                $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');                
+                $("#oTalon").append('<div class="cardWarper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
             }
             if($("#oTalon").children().length > 4){
                 $("#oTalon").children().eq(0).remove();
@@ -192,12 +192,12 @@
          //execute Card
          if(data.cardDictate.executed == false){//ist die order schon ausgeführt
             if(data.cardDictate.origin == prev && data.clockwise == true || data.cardDictate.origin == next && data.clockwise == false){//betrifft die Order den Spieler
-                $.post("<?php echo site_url('/game/orderExecuted/'.$id.'/');?>");
+                $.post("<?php echo site_url('/game/orderExecuted/' . $id . '/'); ?>");
                 switch(data.cardDictate.order){
                     case "plus2":
                         for(let i = 0; i < 2; i++){
                             drawCard(0);
-                            await sleep(300); 
+                            await sleep(300);
                         }
                         break;
                     case "plus4":
@@ -205,29 +205,29 @@
                             drawCard(0);
                             await sleep(300);
                         }
-                        break;   
+                        break;
                 }
             }
         }
 
 
-        } 
-    
+        }
+
     }
 
     function playCard(pThis){
         let allowed = false;
 
-        if(clientTurn && cardDrawn == null){//wenn der Spieler am zug ist
+        if(clientTurn && cardDrawn == null){ // if it is the player's turn and no card has been drawn
             if(pThis.data("name").substring(0, 1) == lastCard.name.substring(0,1) || pThis.data("name").substring(0,1) == "n" || pThis.data("name").substring(1) == lastCard.name.substring(1)) allowed = true;
         }
-        else{//wenn der Spieler eine karte gezogen hat und diese legen kann
+        else{ // if a card has been drawn, it can only be played if it matches the drawn card
             if(cardDrawn['id'] == pThis.data("id")) allowed = true;
         }
 
         if(allowed){
-            $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
-            
+            $("#oTalon").append('<div class="cardWarper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
+
             if(pThis.data("name").substring(0,1) == "n"){
                 updateTalon = false;
                 current = pThis;
@@ -236,7 +236,7 @@
             else{
                 clientTurn = false;
 
-                $.post("<?php echo site_url('/game/playCard/'.$id.'/');?>"+self,
+                $.post("<?php echo site_url('/game/playCard/' . $id . '/'); ?>"+self,
                 {
                     id: pThis.data('id'),
                 },
@@ -253,14 +253,14 @@
     function drawCard(endTurn = 1){
         if(clientTurn && cardDrawn == null){
             if(endTurn == 1)clientTurn = false;
-            $.post("<?php echo site_url('/game/drawCard/'.$id.'/');?>"+self+'/'+endTurn,
+            $.post("<?php echo site_url('/game/drawCard/' . $id . '/'); ?>"+self+'/'+endTurn,
             {
             },
             function(JSONReturnVal){
                 let returnVal = JSON.parse(JSONReturnVal);
 
                 let card = returnVal.card;
-                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+card.name+'" data-x="'+card.x+'" data-y="'+card.y+'" data-id="'+card.id+'"><img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+(card.y*230)+'px; margin-left: -'+(card.x*153)+'px;"></div>');
+                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+card.name+'" data-x="'+card.x+'" data-y="'+card.y+'" data-id="'+card.id+'"><img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+(card.y*230)+'px; margin-left: -'+(card.x*153)+'px;"></div>');
 
                 if(returnVal.playable){
                     $("#endTurn").show();
@@ -271,14 +271,14 @@
     }
 
     $(document).ready(function(){
-        $(".chooseColorField").click(function(){//eine Frabe wird gewählt
+        $(".chooseColorField").click(function(){ // a color has been chosen
             if(clientTurn){
 
                 clientTurn = false;
 
                 let color = $(this).data('color');
                 $("#chooseColor").hide();
-                $.post("<?php echo site_url('/game/playCard/'.$id.'/');?>"+self,
+                $.post("<?php echo site_url('/game/playCard/' . $id . '/'); ?>"+self,
                     {
                         id: current.data('id'),
                         color: color,
@@ -293,7 +293,7 @@
             $("#endTurn").hide();
             cardDrawn = null;
             clientTurn = false;
-            $.post("<?php echo site_url('/game/endTurn/'.$id);?>");
+            $.post("<?php echo site_url('/game/endTurn/' . $id); ?>");
         });
     });
 
