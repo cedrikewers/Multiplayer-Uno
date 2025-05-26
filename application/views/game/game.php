@@ -21,16 +21,16 @@
 </style>
 <div style="background: rgb(211,58,73);min-height:100%;">
     <div class="row"style="margin:0%">
-        <div class="col-3" style="height: 20vh;"><img src="/assets/img/tres.png" height="100%" /></div>
-        <div class="col-6 text-center d-xl-flex justify-content-center align-items-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
-            <div><img src="/assets/img/user.png" height="100px" />
+        <div class="col-3" style="height: 20vh;"><img src="<?php echo site_url('../assets/img/tres.png')?>" height="100%" /></div>
+        <div class="col-6 text-center d-xl-flex justify-content-center align-items-center"><img src="<?php echo site_url('../assets/img/deck.png')?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+            <div><img src="<?php echo site_url('../assets/img/user.png')?>" height="100px" />
                 <p id="player3" class="username">Not in Game3</p>
             </div><span id="cardCount3" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span>
         </div>
     </div>
     <div class="row" style="margin:0%">
-        <div class="col-3 d-xl-flex justify-content-center align-items-center" style="height: 35vh;"><span id="cardCount2" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
-            <div><img src="/assets/img/user.png" height="100px" />
+        <div class="col-3 d-xl-flex justify-content-center align-items-center" style="height: 35vh;"><span id="cardCount2" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span><img src="<?php echo site_url('../assets/img/deck.png')?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+            <div><img src="<?php echo site_url('../assets/img/user.png')?>" height="100px" />
                 <p id="player2" class="username">Not in game2</p>
             </div>
         </div>
@@ -57,16 +57,16 @@
 
             </div>
         </div>
-        <div class="col-3 d-xl-flex justify-content-center align-items-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
-            <div><img src="/assets/img/user.png" height="100px" />
+        <div class="col-3 d-xl-flex justify-content-center align-items-center"><img src="<?php echo site_url('../assets/img/deck.png')?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+            <div><img src="<?php echo site_url('../assets/img/user.png')?>" height="100px" />
                 <p id="player4" class="username">Not in Game4</p>
             </div><span id="cardCount4" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span>
         </div>
     </div>
     <div class="row"style="margin:0%">
         <div class="col-3" style="height: 20vh;"></div>
-            <div class="col-6 d-xl-flex justify-content-center align-items-center"><img src="/assets/img/deck.png" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
-            <div><img src="/assets/img/user.png" height="100px" />
+            <div class="col-6 d-xl-flex justify-content-center align-items-center"><img src="<?php echo site_url('../assets/img/deck.png')?>" height="40px" style="margin-right: 2px;margin-bottom: 59px;" />
+            <div><img src="<?php echo site_url('../assets/img/user.png')?>" height="100px" />
                 <p id="player1" class="username"></p>
             </div><span id="cardCount1" style="position: absolute;margin-bottom: 64px;margin-right: 108px;font-weight: bold;"></span>
         </div>
@@ -79,7 +79,7 @@
             <button id="endTurn" class="btn btn btn-warning" style="display: none;">End Turn</button>
         </div>
 
-    <img id="talon" src="/assets/img/CardBack.png" style="position:absolute; left: 0px; width: 200px; bottom: 0px" onclick="drawCard()"/>
+    <img id="talon" src="<?php echo site_url('../assets/img/CardBack.png')?>" style="position:absolute; left: 0px; width: 200px; bottom: 0px" onclick="drawCard()"/>
 </div>
 
 <script>
@@ -115,10 +115,10 @@
         //first time only
         if(first){
             for (let i = 0; i < hand.length; i++) {
-                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+hand[i].name+'" data-x="'+hand[i].x+'" data-y="'+hand[i].y+'" data-id="'+hand[i].id+'"><img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+(hand[i].y*230)+'px; margin-left: -'+(hand[i].x*153)+'px;"></div>');
+                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+hand[i].name+'" data-x="'+hand[i].x+'" data-y="'+hand[i].y+'" data-id="'+hand[i].id+'"><img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+(hand[i].y*230)+'px; margin-left: -'+(hand[i].x*153)+'px;"></div>');
             }
 
-            $("#oTalon").append('<div class="cardWraper" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
+            $("#oTalon").append('<div class="cardWraper" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
 
             self = order[pointer];
             next = order[(pointer+1) % data.playerCount];
@@ -155,7 +155,7 @@
         //update oTalon
         if(updateTalon){
             if(lastCard.id != $("#oTalon").children().last().data("id")){
-                $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');                
+                $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');                
             }
             if($("#oTalon").children().length > 4){
                 $("#oTalon").children().eq(0).remove();
@@ -226,7 +226,7 @@
         }
 
         if(allowed){
-            $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
+            $("#oTalon").append('<div class="cardWraper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
             
             if(pThis.data("name").substring(0,1) == "n"){
                 updateTalon = false;
@@ -260,7 +260,7 @@
                 let returnVal = JSON.parse(JSONReturnVal);
 
                 let card = returnVal.card;
-                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+card.name+'" data-x="'+card.x+'" data-y="'+card.y+'" data-id="'+card.id+'"><img src="/assets/UNO_cards_deck.svg" height="800%" style="margin-top: -'+(card.y*230)+'px; margin-left: -'+(card.x*153)+'px;"></div>');
+                $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+card.name+'" data-x="'+card.x+'" data-y="'+card.y+'" data-id="'+card.id+'"><img src="<?php echo site_url('../assets/UNO_cards_deck.svg')?>" height="800%" style="margin-top: -'+(card.y*230)+'px; margin-left: -'+(card.x*153)+'px;"></div>');
 
                 if(returnVal.playable){
                     $("#endTurn").show();

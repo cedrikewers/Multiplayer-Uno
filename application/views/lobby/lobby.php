@@ -1,12 +1,12 @@
 <div style="background-color: rgb(211,58,73);min-height:100%">
     <div class="row justify-content-center" style="margin: 0%;">
-        <div class="col-md-8 col-lg-6 col-xl-4"><img src="/assets/img/tres.png" style="width: 100%" /></div>
+        <div class="col-md-8 col-lg-6 col-xl-4"><img src="<?php echo site_url('../assets/img/tres.png')?>")" style="width: 100%" /></div>
     </div>
     <div class="row justify-content-center" style="margin: 0%;">
         <div class="col-10 col-md-9 col-lg-8 col-xl-5 col-xxl-6">
             <div id="playerDisplay" class="row">
                 <div class="col-4 ">
-                    <figure class="figure" style="max-width:185.5px"><img class="img-fluid figure-img" src="/assets/img/host.png" />
+                    <figure class="figure" style="max-width:185.5px"><img class="img-fluid figure-img" src="<?php echo site_url('../assets/img/host.png')?>" />
                         <figcaption id="hostIcon" class="figure-caption text-center" style="color: rgb(255,255,255); overflow: hidden"></figcaption>
                     </figure>
                 </div>
@@ -42,7 +42,7 @@
         $('#hostIcon').html(lobbyData.players.host.username);
 
         while(playerCount < lobbyData.playerCount){
-            $('#playerDisplay').append('<div class="col-4 "><figure class="figure" style="max-width:185.5px"><img class="img-fluid figure-img" src="/assets/img/user.png"/><figcaption id="player'+(playerCount-1)+'" class="figure-caption text-center" style="color: rgb(255,255,255);overflow: hidden">'+lobbyData["players"][playerCount-1].username+'</figcaption></figure>');
+            $('#playerDisplay').append('<div class="col-4 "><figure class="figure" style="max-width:185.5px"><img class="img-fluid figure-img" src="<?php echo site_url('../assets/img/user.png')?>"/><figcaption id="player'+(playerCount-1)+'" class="figure-caption text-center" style="color: rgb(255,255,255);overflow: hidden">'+lobbyData["players"][playerCount-1].username+'</figcaption></figure>');
             playerCount++;
         }
     }

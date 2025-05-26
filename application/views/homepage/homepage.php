@@ -1,6 +1,6 @@
 <div style="background-color: rgb(211,58,73);height:100%">
     <div class="row justify-content-center" style="margin: 0%;">
-        <div class="col-md-8 col-lg-6 col-xl-4"><img src="/assets/img/tres.png" style="width: 100%" /></div>
+        <div class="col-md-8 col-lg-6 col-xl-4"><img src="<?php echo site_url('../assets/img/tres.png')?>" style="width: 100%" /></div>
     </div>
     <div class="row justify-content-center" style="margin: 0%;">
     <div class="col-10 col-md-9 col-lg-8 col-xl-5 col-xxl-5">
