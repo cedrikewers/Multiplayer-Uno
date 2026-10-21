@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+#[\AllowDynamicProperties]
 class Lobby extends CI_Controller
 {
 
@@ -18,17 +19,16 @@ class Lobby extends CI_Controller
     //Helper Methods
     public function getJSON($id)
     {
-        $lobbyData = fopen('./lobbys/' . $id . '.json', 'r+');
-        $dataJSON  = fread($lobbyData, filesize('./lobbys/' . $id . '.json'));
-        fclose($lobbyData);
-        return json_decode($dataJSON, true);
+        $redis = new Redis();
+        $redis->connect('redis');
+        return json_decode($redis->get($id), true);
     }
 
     public function setJSON($id, $data)
     {
-        $lobbyData = fopen('./lobbys/' . $id . '.json', 'w');
-        fwrite($lobbyData, json_encode($data));
-        fclose($lobbyData);
+        $redis = new Redis();
+        $redis->connect('redis');
+        $redis->set($id, json_encode($data));
     }
 
     //Update the client
@@ -37,9 +37,7 @@ class Lobby extends CI_Controller
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
 
-        $lobbyData = fopen('./lobbys/' . $id . '.json', 'r');
-        $data      = json_decode(fread($lobbyData, filesize('./lobbys/' . $id . '.json')), true);
-        fclose($lobbyData);
+        $data = $this->getJSON($id);
 
         unset($data['talon']);
 
@@ -90,21 +88,15 @@ class Lobby extends CI_Controller
             'oTalon'      => $oTalon,
         ];
 
-        $json = json_encode($lobby);
-
-        if (! file_exists('./lobbys')) {
-            mkdir('./lobbys', 0777, true);
-        }
-        $file = fopen('./lobbys/' . $id . '.json', "w+");
-        fwrite($file, $json);
-        fclose($file);
-
+        $this->setJSON($id, $lobby);
         $this->lobby($id, true);
     }
     //show lobby
     public function lobby($id, $host = false)
     {
-        if (file_exists('./lobbys/' . $id . '.json')) {
+        $redis = new Redis();
+        $redis->connect('redis');
+        if ($redis->exists($id)) {
             $viewData = ['id' => $id, 'host' => false];
 
             if ($host) {

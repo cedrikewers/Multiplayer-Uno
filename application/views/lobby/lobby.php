@@ -49,8 +49,9 @@
 
     $(document).ready(function(e){
         $('#start').click(function(){
-            $.post("<?php echo site_url('lobby/start/' . $id) ?>");
-            window.location.replace("<?php echo site_url('g/' . $id . '?userId=' . $_COOKIE['id']) ?>");
+            $.post("<?php echo site_url('lobby/start/' . $id) ?>").done(function(){
+                window.location.replace("<?php echo site_url('g/' . $id . '?userId=' . $_COOKIE['id']) ?>");
+            });
         });
     });
 </script>

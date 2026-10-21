@@ -1,4 +1,5 @@
 <?php
+#[\AllowDynamicProperties]
 class Template {
 var $template_data = array();
 

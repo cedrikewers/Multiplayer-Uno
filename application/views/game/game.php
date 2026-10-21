@@ -118,7 +118,7 @@
                 $("#hand").append('<div class="cardHand" onclick="playCard($(this))" data-name="'+hand[i].name+'" data-x="'+hand[i].x+'" data-y="'+hand[i].y+'" data-id="'+hand[i].id+'"><img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+(hand[i].y*230)+'px; margin-left: -'+(hand[i].x*153)+'px;"></div>');
             }
 
-            $("#oTalon").append('<div class="cardWarper" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
+            $("#oTalon").append('<div class="cardWrapper" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
 
             self = order[pointer];
             next = order[(pointer+1) % data.playerCount];
@@ -155,7 +155,7 @@
         //update oTalon
         if(updateTalon){
             if(lastCard.id != $("#oTalon").children().last().data("id")){
-                $("#oTalon").append('<div class="cardWarper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
+                $("#oTalon").append('<div class="cardWrapper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+lastCard.id+'" data-name="'+lastCard.name+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+lastCard.y*180+'px; margin-left: -'+lastCard.x*120+'px"></div>');
             }
             if($("#oTalon").children().length > 4){
                 $("#oTalon").children().eq(0).remove();
@@ -226,7 +226,7 @@
         }
 
         if(allowed){
-            $("#oTalon").append('<div class="cardWarper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
+            $("#oTalon").append('<div class="cardWrapper" style="transform:rotate('+(Math.random()*360)+'deg)" data-id="'+pThis.data("id")+'"> <img src="<?php echo site_url('../assets/UNO_cards_deck.svg') ?>" height="800%" style="margin-top: -'+pThis.data('y')*180+'px; margin-left: -'+pThis.data('x')*120+'px"></div>');
 
             if(pThis.data("name").substring(0,1) == "n"){
                 updateTalon = false;
